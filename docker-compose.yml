@@ -1,0 +1,30 @@
+version: "3.3"
+
+services:
+    nginx:
+        image: nginx:latest
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./apps:/var/www
+            - ./ssl:/etc/nginx/ssl/
+            - ./sites-enabled:/etc/nginx/conf.d
+        depends_on:
+            - php-fpm
+        links:
+            - php-fpm
+        networks:
+            - movieWorld
+    php-fpm:
+        build:
+          context: .
+        volumes:
+            - ./apps:/var/www
+        networks:
+            - movieWorld
+        ports:
+            - "9000:9000"
+
+networks:
+    movieWorld:
